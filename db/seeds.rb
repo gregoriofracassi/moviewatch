@@ -3,8 +3,8 @@ require 'json'
 
 Movie.destroy_all
 
-(1..724).each do |num|
-  url = "https://api.themoviedb.org/3/discover/movie?api_key=49da6ec6d7e005696bf13be889ab5bc9&certification_country=US&certification.lte=G&sort_by=popularity.desc&page=#{num}"
+(1..50).each do |num|
+  url = "https://api.themoviedb.org/3/discover/movie?api_key=49da6ec6d7e005696bf13be889ab5bc9&sort_by=popularity.desc&page=#{num}"
   json = open(url).read
   objs = JSON.parse(json)
 
@@ -14,3 +14,4 @@ Movie.destroy_all
   puts "created page #{num}"
 end
 puts "seeded everything"
+
