@@ -1,7 +1,16 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+require 'open-uri'
+require 'json'
+
+Movie.destroy_all
+
+(1..724).each do |num|
+  url = "https://api.themoviedb.org/3/discover/movie?api_key=49da6ec6d7e005696bf13be889ab5bc9&certification_country=US&certification.lte=G&sort_by=popularity.desc&page=#{num}"
+  json = open(url).read
+  objs = JSON.parse(json)
+
+  objs["results"].each do |movie|
+    Movie.create(title: movie["title"], year: movie["release_date"], rating: movie["vote_average"], plot: movie["overview"])
+  end
+  puts "created page #{num}"
+end
+puts "seeded everything"
