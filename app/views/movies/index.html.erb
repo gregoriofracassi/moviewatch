@@ -1,6 +1,5 @@
 <% @movies.each do |movie| %>
-  <h3><%= movie.title %> (<%= movie.year %>)</h3>
-  <p><%= movie.plot %></p>
+  <h4><%= link_to movie.title, movie_path(movie) %> (<%= movie.year %>)</h4>
 <% end %>
 
 <%= paginate @movies %>
