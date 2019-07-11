@@ -3,3 +3,11 @@
   <li>released in <%= @movie.year %></li>
   <li>Plot: <%= @movie.plot %></li>
 </ul>
+<br>
+<br>
+<br>
+<%= simple_form_for [@movie, @watch] do |f| %>
+  <%= f.button :submit, "watched" %>
+<% end %>
+
+
