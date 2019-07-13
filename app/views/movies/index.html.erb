@@ -1,5 +1,8 @@
 <% @movies.each do |movie| %>
   <h4><%= link_to movie.title, movie_path(movie) %> (<%= movie.year %>)</h4>
+  <%= simple_form_for [movie, @watch] do |f| %>
+    <%= f.button :submit, "watched" %>
+  <% end %>
 <% end %>
 
 <%= paginate @movies %>
