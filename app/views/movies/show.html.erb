@@ -3,14 +3,7 @@
   <li>released in <%= @movie.year %></li>
   <li>Plot: <%= @movie.plot %></li>
 </ul>
-<% simple_form_for [@movie, @like] do |f| %>
+<%= simple_form_for [@movie, @like] do |f| %>
   <%= f.input :stars, collection: 1..3 %>
   <%= f.button :submit %>
 <% end %>
-
-<div id="app">
-  <h2>Syncing with V-model (Vue 2.2+)</h2>
-  <star-rating v-model="rating"></star-rating>
-
-<h3>Selected Rating: {{rating}}</h3>
-</div>
