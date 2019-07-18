@@ -4,7 +4,8 @@
   <li>Plot: <%= @movie.plot %></li>
 </ul>
 <%= simple_form_for [@movie, @like] do |f| %>
-  <%= f.input :stars, collection: 1..3 %>
-  <%= f.button :submit %>
+  <%= f.collection_radio_buttons :stars, [[3], [2], [1]], :first, :last, item_wrapper_tag: false, boolean_style: :inline do |b| %>
+    <%= b.radio_button + b.label {''} %>
+  <% end %>
+  <%= f.button :submit, "vote" %>
 <% end %>
-
