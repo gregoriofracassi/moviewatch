@@ -7,6 +7,14 @@
     <span class="navbar-toggler-icon"></span>
   </button>
 
+  <%= form_tag root_path, method: :get do %>
+    <%= text_field_tag :query,
+      params[:query],
+      class: "form-control",
+      placeholder: "Find a movie"
+    %>
+  <% end %>
+
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
