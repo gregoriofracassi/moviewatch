@@ -4,7 +4,6 @@ class LikesController < ApplicationController
     @like = Like.new(like_params)
     @like.movie = @movie
     @like.user = current_user
-    raise
     @like.save
 
     return unless (@movie.watches & current_user.watches).empty?

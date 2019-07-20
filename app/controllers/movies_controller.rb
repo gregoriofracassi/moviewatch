@@ -17,9 +17,14 @@ class MoviesController < ApplicationController
   end
 end
 
-
-    # if params[:query].present?
-    #   @houses = House.search_by_address(params[:query])
-    # else
-    #   @houses = House.where.not(latitude: nil, longitude: nil).order(created_at: :desc)
-
+# shared = []
+# User.all.each do |user|
+#   shared_likes = (user.likes & current_user.likes).size
+#   user_likes_hash = Hash.new
+#   user_likes_hash[:user] = user
+#   user_likes_hash[:common_likes] = shared_likes
+#   shared << user_likes_hash
+# end
+# shared_ord = shared.sort_by { |elem| elem[:common_likes] }
+# sim_shared = shared_ord[0..5]
+# sim_shared.map { |obj| obj[:user] }
