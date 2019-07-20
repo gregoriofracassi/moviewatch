@@ -2,6 +2,10 @@
 <ul>
   <li>released in <%= @movie.year %></li>
   <li>Plot: <%= @movie.plot %></li>
+<li>
+  Genre:
+  <%= @movie.genre_name.join(", ") %>
+</li>
 </ul>
 <%= simple_form_for [@movie, @like] do |f| %>
   <%= f.collection_radio_buttons :stars, [[3], [2], [1]], :first, :last, item_wrapper_tag: false, boolean_style: :inline do |b| %>
