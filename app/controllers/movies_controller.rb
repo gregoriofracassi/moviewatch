@@ -11,20 +11,20 @@ class MoviesController < ApplicationController
       redirect_to new_user_session_path
     end
   end
+
   def show
     @movie = Movie.find(params[:id])
     @like = Like.new
   end
-end
 
-# shared = []
-# User.all.each do |user|
-#   shared_likes = (user.likes & current_user.likes).size
-#   user_likes_hash = Hash.new
-#   user_likes_hash[:user] = user
-#   user_likes_hash[:common_likes] = shared_likes
-#   shared << user_likes_hash
-# end
-# shared_ord = shared.sort_by { |elem| elem[:common_likes] }
-# sim_shared = shared_ord[0..5]
-# sim_shared.map { |obj| obj[:user] }
+  def affiliate_users
+    shared = []
+    c_like_ids = current_user.likes.map { |like| like[:movie_id] }
+    User.all.each do |user|
+      shared_likes = (c_like_ids & user.likes.map { |like| like[:movie_id] }).size
+      shared << { user: user, common_likes: shared_likes}
+    end
+    shared_ord = shared.sort_by { |elem| elem[:common_likes] }.reverse
+    @fellas = shared_ord.map { |obj| obj[:user] }
+  end
+end

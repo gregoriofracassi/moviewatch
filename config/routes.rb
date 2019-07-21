@@ -6,4 +6,6 @@ Rails.application.routes.draw do
   resources :movies do
     resources :watches, :likes
   end
+
+  get '/afusers', to: "movies#affiliate_users", as: 'affiliate_users'
 end
