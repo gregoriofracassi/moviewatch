@@ -21,6 +21,3 @@ class LikesController < ApplicationController
   end
 end
 
-# a1 = [3, 4, 5, 6, 7]
-# a2 = [3, 1, 2, 0, 9]
-# puts (a1 & a2).empty?
