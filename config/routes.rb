@@ -6,4 +6,6 @@ Rails.application.routes.draw do
   resources :movies do
     resources :watches, :likes
   end
+
+  get '/watchmovies', to: "movies#watchable_movies", as: 'watchable_movies'
 end
