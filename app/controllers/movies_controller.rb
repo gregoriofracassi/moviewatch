@@ -25,6 +25,15 @@ class MoviesController < ApplicationController
       shared << { user: user, common_likes: shared_likes}
     end
     shared_ord = shared.sort_by { |elem| elem[:common_likes] }.reverse
-    @fellas = shared_ord.map { |obj| obj[:user] }
+    shared_ord.map { |obj| obj[:user] }
+  end
+
+  def watchable_movies
+    watchable = []
+    affiliate_users.each do |user|
+      watchable << (user.watches.map { |watch| watch[:movie_id] }) - (current_user.watches.map { |watch| watch[:movie_id] })
+    end
+    @watchable_movies = watchable.flatten.uniq.map { |id| Movie.find(id) }
   end
 end
+
