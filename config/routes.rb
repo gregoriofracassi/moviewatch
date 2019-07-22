@@ -7,5 +7,5 @@ Rails.application.routes.draw do
     resources :watches, :likes
   end
 
-  get '/watchmovies', to: "movies#watchable_movies", as: 'watchable_movies'
+  get '/simusers', to: 'movies#affiliate_users', as: 'affiliate_users'
 end
