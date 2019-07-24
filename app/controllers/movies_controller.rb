@@ -4,7 +4,7 @@ class MoviesController < ApplicationController
       if params[:query].present?
         @movies = Movie.search_by_title_and_year(params[:query]).page(params[:page])
       else
-        @movies = Movie.order(:title).page(params[:page])
+        @movies = watchable_movies.page(params[:page])
       end
         @watch = Watch.new
     else
@@ -16,17 +16,6 @@ class MoviesController < ApplicationController
     @movie = Movie.find(params[:id])
     @like = Like.new
   end
-
-  # def affiliate_users
-  #   shared = []
-  #   c_like_ids = current_user.likes.map { |like| like[:movie_id] }
-  #   User.all.each do |user|
-  #     shared_likes = (c_like_ids & user.likes.map { |like| like[:movie_id] }).size
-  #     shared << { user: user, common_likes: shared_likes }
-  #   end
-  #   shared_ord = shared.sort_by { |elem| elem[:common_likes] }.reverse
-  #   shared_ord.map { |obj| obj[:user] }
-  # end
 
   def watchable_movies
     watchable = []
@@ -41,7 +30,17 @@ class MoviesController < ApplicationController
         watchable << { movie_id: movie[:movie_id], points: movie[:stars] * obj[:points] }
       end
     end
-    raise
+    record_sums = []
+    watchable.each do |pair|
+      x = pair[:movie_id]
+      score = 0
+      watchable.each do |record|
+        score += record[:points] if record[:movie_id] == x
+      end
+      record_sums << { movie_id: pair[:movie_id], points: score }
+    end
+    ord_rec_sums = record_sums.sort_by { |elem| elem[:points] }.reverse
+    @final_movs = ord_rec_sums.map { |mov| mov[:movie_id] }.uniq.map { |id| Movie.find(id) }
   end
 
   def affiliate_users
@@ -65,6 +64,3 @@ class MoviesController < ApplicationController
   end
 end
 
-
-# unless current_user.watches.map { |watch| watch[:movie_id] }.include?(like.movie_id)
-#   watchable << { movie_id: like.movie_id, stars: like.stars }
