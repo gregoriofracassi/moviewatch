@@ -28,32 +28,43 @@ class MoviesController < ApplicationController
   #   shared_ord.map { |obj| obj[:user] }
   # end
 
-  # def watchable_movies
-  #   watchable = []
-  #   affiliate_users.each do |user|
-  #     watchable << (user.watches.map { |watch| watch[:movie_id] }) - (current_user.watches.map { |watch| watch[:movie_id] })
-  #   end
-  #   @watchable_movies = watchable.flatten.uniq.map { |id| Movie.find(id) }
-  # end
+  def watchable_movies
+    watchable = []
+    affiliate_users.each do |obj|
+      like_stars = []
+      obj[:user].likes.each do |like|
+        unless current_user.watches.map { |watch| watch[:movie_id] }.include?(like.movie_id)
+          like_stars << { movie_id: like.movie_id, stars: like.stars }
+        end
+      end
+      like_stars.each do |movie|
+        watchable << { movie_id: movie[:movie_id], points: movie[:stars] * obj[:points] }
+      end
+    end
+    raise
+  end
 
   def affiliate_users
-    sim_users = []
+    @aff_users_scores = []
     User.all.each do |user|
       points = 0
       user.likes.each do |like|
         if current_user.likes.map { |lik| lik[:movie_id] }.include?(like[:movie_id])
           if (like.stars - current_user.likes.where(movie_id: like.movie_id)[0].stars).abs == 2
-            points += 2
+            points += 1
           elsif (like.stars - current_user.likes.where(movie_id: like.movie_id)[0].stars).abs == 1
-            points += 3
+            points += 2
           elsif (like.stars - current_user.likes.where(movie_id: like.movie_id)[0].stars).abs == 0
-            points += 4
+            points += 3
           end
         end
       end
-      sim_users << { user: user, points: points }
+      @aff_users_scores << { user: user, points: points }
     end
-    sim_users_ord = sim_users.sort_by { |elem| elem[:points] }.reverse
-    @aff_users = sim_users_ord.map { |obj| obj[:user] }
+    @aff_users_scores
   end
 end
+
+
+# unless current_user.watches.map { |watch| watch[:movie_id] }.include?(like.movie_id)
+#   watchable << { movie_id: like.movie_id, stars: like.stars }
