@@ -4,7 +4,7 @@ class MoviesController < ApplicationController
       if params[:query].present?
         @movies = Movie.search_by_title_and_year(params[:query]).page(params[:page])
       else
-        @movies = watchable_movies.page(params[:page])
+        @movies = Kaminari.paginate_array(watchable_movies).page(params[:page]).per(15)
       end
         @watch = Watch.new
     else
