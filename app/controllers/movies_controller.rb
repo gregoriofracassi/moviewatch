@@ -12,12 +12,7 @@ class MoviesController < ApplicationController
     end
   end
 
-  def show
-    @movie = Movie.find(params[:id])
-    @like = Like.new
-  end
-
-  def watchable_movies
+  def watchables
     watchable = []
     affiliate_users.each do |obj|
       like_stars = []
@@ -27,20 +22,27 @@ class MoviesController < ApplicationController
         end
       end
       like_stars.each do |movie|
-        watchable << { movie_id: movie[:movie_id], points: movie[:stars] * obj[:points] }
+        watchable << { movie_id: movie[:movie_id], points: movie[:stars] * obj[:points], user: obj[:user] }
       end
     end
     record_sums = []
     watchable.each do |pair|
       x = pair[:movie_id]
       score = 0
+      users = []
       watchable.each do |record|
-        score += record[:points] if record[:movie_id] == x
+        if record[:movie_id] == x
+          score += record[:points]
+          users << record[:user]
+        end
       end
-      record_sums << { movie_id: pair[:movie_id], points: score }
+      record_sums << { movie_id: pair[:movie_id], points: score, users: users }
     end
-    ord_rec_sums = record_sums.sort_by { |elem| elem[:points] }.reverse
-    @final_movs = ord_rec_sums.map { |mov| mov[:movie_id] }.uniq.map { |id| Movie.find(id) }
+    @ord_rec_sums = record_sums.sort_by { |elem| elem[:points] }.reverse.uniq { |el| el[:movie_id] }
+  end
+
+  def watchable_movies
+    @final_movs = watchables.map { |mov| mov[:movie_id] }.uniq.map { |id| Movie.find(id) }
   end
 
   def affiliate_users
@@ -61,6 +63,20 @@ class MoviesController < ApplicationController
       @aff_users_scores << { user: user, points: points }
     end
     @aff_users_scores
+  end
+
+  def users_recommend
+    recommenders = []
+    watchables.each do |obj|
+      recommenders << obj[:users] if obj[:movie_id] == params[:id].to_i
+    end
+    recommenders.flatten
+  end
+
+  def show
+    @movie = Movie.find(params[:id])
+    @like = Like.new
+    @recommending_users = users_recommend.flatten
   end
 end
 
