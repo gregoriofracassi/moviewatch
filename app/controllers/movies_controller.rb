@@ -76,7 +76,7 @@ class MoviesController < ApplicationController
   def show
     @movie = Movie.find(params[:id])
     @like = Like.new
-    @recommending_users = users_recommend.flatten
+    @recommending_users = users_recommend
   end
 end
 
