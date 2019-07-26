@@ -4,7 +4,7 @@ class MoviesController < ApplicationController
       if params[:query].present?
         @movies = Movie.search_by_title_and_year(params[:query]).page(params[:page])
       else
-        @movies = Movie.order(:title).page(params[:page])
+        @movies = Kaminari.paginate_array(watchable_movies).page(params[:page]).per(15)
       end
         @watch = Watch.new
     else
@@ -17,23 +17,50 @@ class MoviesController < ApplicationController
     @like = Like.new
   end
 
-  def affiliate_users
-    shared = []
-    c_like_ids = current_user.likes.map { |like| like[:movie_id] }
-    User.all.each do |user|
-      shared_likes = (c_like_ids & user.likes.map { |like| like[:movie_id] }).size
-      shared << { user: user, common_likes: shared_likes}
-    end
-    shared_ord = shared.sort_by { |elem| elem[:common_likes] }.reverse
-    shared_ord.map { |obj| obj[:user] }
-  end
-
   def watchable_movies
     watchable = []
-    affiliate_users.each do |user|
-      watchable << (user.watches.map { |watch| watch[:movie_id] }) - (current_user.watches.map { |watch| watch[:movie_id] })
+    affiliate_users.each do |obj|
+      like_stars = []
+      obj[:user].likes.each do |like|
+        unless current_user.watches.map { |watch| watch[:movie_id] }.include?(like.movie_id)
+          like_stars << { movie_id: like.movie_id, stars: like.stars }
+        end
+      end
+      like_stars.each do |movie|
+        watchable << { movie_id: movie[:movie_id], points: movie[:stars] * obj[:points] }
+      end
     end
-    @watchable_movies = watchable.flatten.uniq.map { |id| Movie.find(id) }
+    record_sums = []
+    watchable.each do |pair|
+      x = pair[:movie_id]
+      score = 0
+      watchable.each do |record|
+        score += record[:points] if record[:movie_id] == x
+      end
+      record_sums << { movie_id: pair[:movie_id], points: score }
+    end
+    ord_rec_sums = record_sums.sort_by { |elem| elem[:points] }.reverse
+    @final_movs = ord_rec_sums.map { |mov| mov[:movie_id] }.uniq.map { |id| Movie.find(id) }
+  end
+
+  def affiliate_users
+    @aff_users_scores = []
+    User.all.each do |user|
+      points = 0
+      user.likes.each do |like|
+        if current_user.likes.map { |lik| lik[:movie_id] }.include?(like[:movie_id])
+          if (like.stars - current_user.likes.where(movie_id: like.movie_id)[0].stars).abs == 2
+            points += 1
+          elsif (like.stars - current_user.likes.where(movie_id: like.movie_id)[0].stars).abs == 1
+            points += 2
+          elsif (like.stars - current_user.likes.where(movie_id: like.movie_id)[0].stars).abs == 0
+            points += 3
+          end
+        end
+      end
+      @aff_users_scores << { user: user, points: points }
+    end
+    @aff_users_scores
   end
 end
 

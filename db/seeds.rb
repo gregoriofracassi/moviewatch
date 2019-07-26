@@ -1,7 +1,11 @@
 require 'open-uri'
 require 'json'
 
+
+Like.destroy_all
+Watch.destroy_all
 Movie.destroy_all
+User.destroy_all
 
 (1..20).each do |num|
   url = "https://api.themoviedb.org/3/discover/movie?api_key=49da6ec6d7e005696bf13be889ab5bc9&sort_by=popularity.desc&page=#{num}"
