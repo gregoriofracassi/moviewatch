@@ -13,3 +13,13 @@
   <% end %>
   <%= f.button :submit, "vote" %>
 <% end %>
+<% if @recommending_users.any? %>
+  <p>
+    highly recommended by:
+    <% emails = [] %>
+    <% @recommending_users.each do |user| %>
+      <% emails << user.email %>
+    <% end %>
+    <%= emails.join(", ") %>
+  </p>
+<% end %>
