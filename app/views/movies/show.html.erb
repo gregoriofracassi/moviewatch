@@ -13,6 +13,7 @@
   <% end %>
   <%= f.button :submit, "vote" %>
 <% end %>
+<%= link_to "top 5", make_top_path %>
 <% if @recommending_users.any? %>
   <p>
     highly recommended by:
