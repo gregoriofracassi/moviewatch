@@ -1,8 +1,7 @@
 class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
-    @movies =
-    raise
+    @movies = Movie.find(@user.likes.where(top5: true).map { |like| like[:movie_id] })
   end
 
   def watchable_movies_from_movies

@@ -1,0 +1,10 @@
+<ul>
+  <% @top5.each do |movie| %>
+    <li><%= movie.title %> - <%= link_to "remove", undo_top_path(movie) %></li>
+  <% end %>
+</ul>
+<ul>
+  <% @liked3stars.each do |movie| %>
+    <li><%= movie.title %> - <%= link_to "top 5", make_top_path(movie) %></li>
+  <% end %>
+</ul>
