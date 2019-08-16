@@ -42,6 +42,7 @@ class MoviesController < ApplicationController
   end
 
   def watchable_movies
+    # refactor this line
     @final_movs = watchables.map { |mov| mov[:movie_id] }.uniq.map { |id| Movie.find(id) }
   end
 
@@ -68,7 +69,7 @@ class MoviesController < ApplicationController
   def users_recommend
     recommenders = []
     watchables.each do |obj|
-      recommenders << obj[:users] if obj[:movie_id] == params[:id].to_i
+      recommenders << obj[:users] if obj[:movie_id] == params[:id].to_i && obj[:points] > 0
     end
     recommenders.flatten
   end
