@@ -8,18 +8,24 @@
 </li>
 </ul>
 <%= simple_form_for [@movie, @like] do |f| %>
-  <%= f.collection_radio_buttons :stars, [[3], [2], [1]], :first, :last, item_wrapper_tag: false, boolean_style: :inline do |b| %>
+  <%= f.collection_radio_buttons :stars, [[1], [2], [3]], :first, :last, item_wrapper_tag: false, boolean_style: :inline do |b| %>
     <%= b.radio_button + b.label {''} %>
   <% end %>
   <%= f.button :submit, "vote" %>
 <% end %>
+<%= link_to "top 5", make_top_path %>
 <% if @recommending_users.any? %>
   <p>
     highly recommended by:
-    <% emails = [] %>
+    <% @recommending_users.each do |user| %>
+      <%= link_to user.email, user_path(user) %>
+    <% end %>
+  </p>
+<% end %>
+
+
+<!--     <% emails = [] %>
     <% @recommending_users.each do |user| %>
       <% emails << user.email %>
     <% end %>
-    <%= emails.join(", ") %>
-  </p>
-<% end %>
+    <%= emails.join(", ") %> -->
