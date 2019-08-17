@@ -19,7 +19,7 @@ class LikesController < ApplicationController
   end
 
   def make_top5
-    unless Like.where(top5: true).size > 5
+    unless Like.where(top5: true).size >= 5
       x = current_user.likes.where(movie_id: params[:movie_id])[0]
       x.top5 = true
       x.save
