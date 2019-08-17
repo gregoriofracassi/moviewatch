@@ -1,10 +1,10 @@
 <ul id="top5-list">
   <% @top5.each do |movie| %>
-    <li data-movietop-id="<%= movie.id %>"><%= movie.title %> - <%= link_to "remove", undo_top_path(movie)%></li>
+    <li id="movtop-<%= movie.id %>"><%= movie.title %> - <%= link_to "remove", undo_top_path(movie)%></li>
   <% end %>
 </ul>
 <ul id="stars-list">
   <% @liked3stars.each do |movie| %>
-    <li data-moviestars-id="<%= movie.id %>"><%= movie.title %> - <%= link_to "top 5", make_top_path(movie)%></li>
+    <li id="movstar-<%= movie.id %>"><%= movie.title %> - <%= link_to "top 5", make_top_path(movie)%></li>
   <% end %>
 </ul>

@@ -1,1 +1,7 @@
-console.log('ciaciao')
+movie = document.querySelector('#movstar-<%= @movie.id %>');
+movie.remove();
+
+
+topList = document.querySelector('#top5-list');
+newLi = "<li id='movtop-<%= @movie.id %>'><%= @movie.title %></li>";
+topList.insertAdjacentHTML('beforeend', newLi);
