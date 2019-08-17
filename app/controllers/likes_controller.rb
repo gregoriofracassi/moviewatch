@@ -24,7 +24,7 @@ class LikesController < ApplicationController
       x.top5 = true
       x.save
     end
-      redirect_to top_5_path
+    redirect_to top_5_path
   end
 
   def undo_top5
