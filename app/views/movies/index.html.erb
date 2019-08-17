@@ -1,9 +1,11 @@
 <% @movies.each do |movie| %>
+<div id="movie<%= movie.id %>">
   <%= image_tag(movie.poster) %>
   <h4><%= link_to movie.title, movie_path(movie) %> (<%= movie.year %>)</h4>
-  <%= simple_form_for [movie, @watch] do |f| %>
+  <%= simple_form_for([movie, @watch], remote: true) do |f| %>
     <%= f.button :submit, "watched" %>
   <% end %>
+</div>
 <% end %>
 
 <%= paginate @movies %>
