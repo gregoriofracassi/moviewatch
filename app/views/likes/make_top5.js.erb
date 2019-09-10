@@ -1,0 +1,8 @@
+movie = document.querySelector('#movstar-<%= @movie.id %>');
+movie.remove();
+
+
+topList = document.querySelector('#top5-list');
+newLi = "<li id='movtop-<%= @movie.id %>'><%= @movie.title %></li>";
+// newLi = "<li id='movtop-<%= @movie.id %>'><%= @movie.title %> - <%= link_to 'remove', undo_top_path(@movie), remote: true%></li>";
+topList.insertAdjacentHTML('beforeend', newLi);

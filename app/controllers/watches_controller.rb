@@ -6,7 +6,6 @@ class WatchesController < ApplicationController
       @watch.movie = @movie
       @watch.user = current_user
       @watch.save
-      redirect_to movies_path
     # else
     #   do something
     end
