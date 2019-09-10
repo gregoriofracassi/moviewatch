@@ -19,13 +19,14 @@ class LikesController < ApplicationController
   end
 
   def make_top5
+    raise
     @movie = Movie.find(params[:movie_id])
     unless current_user.likes.where(top5: true).size >= 5
       x = current_user.likes.where(movie_id: params[:movie_id])[0]
       x.top5 = true
       x.save
+      redirect_to top_5_path
     end
-    redirect_to top_5_path
   end
 
   def undo_top5
@@ -42,4 +43,3 @@ class LikesController < ApplicationController
     params.require(:like).permit(:stars)
   end
 end
-

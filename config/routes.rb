@@ -15,3 +15,6 @@ Rails.application.routes.draw do
   get '/movies/:movie_id/undotop', to: 'likes#undo_top5', as: 'undo_top'
   get '/pages/settop', to: 'pages#set_top5', as: 'top_5'
 end
+
+# quando una richiesta http è fatta passando un id nestante, sarà esso nei params.
+# Quando si fa una richiesta con id nestante? quando la route lo richiede

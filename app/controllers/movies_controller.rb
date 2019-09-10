@@ -9,6 +9,7 @@ class MoviesController < ApplicationController
         @watch = Watch.new
     else
       redirect_to new_user_session_path
+      # zazazazazaza
     end
   end
 
